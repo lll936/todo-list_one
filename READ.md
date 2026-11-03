@@ -2,7 +2,7 @@
 
 Простой и аккуратный список задач со встроенным таймером Помодоро. Проект написан на чистом HTML/CSS/JS — без фреймворков, сборки и зависимостей.
 
-🔗 **Live-версия:** https://lll936.github.io/todo-list_one/
+🔗 **Live-версия:** [https://lll936.github.io/todo-list_one/](https://lll936.github.io/todo-list_one/)
 
 ---
 
