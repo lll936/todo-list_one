@@ -1,0 +1,283 @@
+:root {
+  --bg: #eef1f9;
+  --card: rgba(255, 255, 255, 0.72);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --text: #1a1f2e;
+  --muted: #7b8496;
+  --accent: #6366f1;
+  --accent-2: #8b5cf6;
+  --accent-hover: #4f46e5;
+  --danger: #ef4444;
+  --done: #aab2c5;
+  --item-bg: rgba(255, 255, 255, 0.6);
+  --item-hover: rgba(255, 255, 255, 0.9);
+  --radius: 20px;
+  --shadow: 0 20px 50px -12px rgba(31, 36, 48, 0.18);
+  --shadow-sm: 0 2px 8px rgba(31, 36, 48, 0.06);
+  --pomo-focus: #6366f1;
+  --pomo-break: #10b981;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1117;
+  --card: rgba(24, 27, 38, 0.72);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #f0f2f8;
+  --muted: #8b93a7;
+  --accent: #818cf8;
+  --accent-2: #a78bfa;
+  --accent-hover: #a5b4fc;
+  --danger: #f87171;
+  --done: #555c70;
+  --item-bg: rgba(255, 255, 255, 0.04);
+  --item-hover: rgba(255, 255, 255, 0.08);
+  --shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --pomo-focus: #818cf8;
+  --pomo-break: #34d399;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+/* Центрируем всё на экране */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center; /* По центру по вертикали */
+  justify-content: center; /* По центру по горизонтали */
+  padding: 24px 16px;
+  background: var(--bg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.bg-blob {
+  position: fixed; border-radius: 50%; filter: blur(80px);
+  opacity: 0.55; z-index: -1; pointer-events: none;
+  animation: float 18s ease-in-out infinite;
+}
+.bg-blob-1 { width: 400px; height: 400px; background: #6366f1; top: -100px; left: -100px; }
+.bg-blob-2 { width: 350px; height: 350px; background: #ec4899; bottom: -80px; right: -80px; animation-delay: -6s; }
+.bg-blob-3 { width: 300px; height: 300px; background: #06b6d4; top: 40%; right: 20%; animation-delay: -12s; opacity: 0.35; }
+[data-theme="dark"] .bg-blob { opacity: 0.28; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(30px, -30px) scale(1.1); }
+}
+
+/* ===== СЕТКА ===== */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  width: 100%;
+  max-width: 860px;
+  align-items: center; /* Выравниваем колонки по центру друг относительно друга */
+}
+
+.app, .pomodoro-card {
+  background: var(--card);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background 0.4s ease, border-color 0.4s ease;
+  animation: fadeIn 0.5s ease;
+  text-align: center; /* Текст по центру во всех карточках */
+}
+
+.app { padding: 32px 28px; }
+
+/* Правая карточка */
+.pomodoro-card {
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px; /* Чтобы карточка не была слишком маленькой */
+}
+
+.app-header { 
+  display: flex; 
+  flex-direction: column; /* Ставим заголовок и кнопку темы друг под другом */
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 24px; 
+  position: relative;
+}
+
+/* Кнопку темы крепим в правый верхний угол */
+.icon-btn {
+  position: absolute;
+  top: 0; right: 0;
+  width: 40px; height: 40px; border-radius: 12px;
+  border: 1px solid var(--card-border); background: var(--item-bg); color: var(--text);
+  cursor: pointer; display: grid; place-items: center; transition: all 0.2s ease; flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--item-hover); transform: translateY(-1px); }
+.icon-btn:active { transform: scale(0.95); }
+[data-theme="light"] .icon-moon { display: none; }
+[data-theme="dark"]  .icon-sun  { display: none; }
+
+h1 {
+  font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.subtitle { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+.add-form { display: flex; gap: 10px; margin-bottom: 18px; }
+.add-form input {
+  flex: 1; padding: 14px 18px; border: 1.5px solid var(--card-border); border-radius: 14px;
+  background: var(--item-bg); color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; transition: all 0.2s ease;
+}
+.add-form input::placeholder { color: var(--muted); }
+.add-form input:focus { border-color: var(--accent); background: var(--item-hover); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12); }
+.add-form button {
+  width: 52px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; cursor: pointer; display: grid; place-items: center; transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s;
+  box-shadow: 0 6px 18px -6px var(--accent);
+}
+.add-form button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.add-form button:active { transform: scale(0.94); }
+
+/* ===== СТИЛИ ТАЙМЕРА ===== */
+.pomo-header { 
+  display: flex; flex-direction: column; align-items: center; 
+  margin-bottom: 24px; width: 100%; 
+}
+
+.pomo-title {
+  font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+
+.pomo-status {
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--pomo-focus); background: rgba(99, 102, 241, 0.1); padding: 6px 14px; border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.pomo-time-display {
+  font-size: 4rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1;
+  color: var(--text); margin-bottom: 32px; transition: color 0.3s ease;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.pomo-settings {
+  display: flex; gap: 12px; width: 100%; max-width: 200px; margin-bottom: 32px;
+  transition: opacity 0.3s ease;
+}
+.pomo-settings.disabled { opacity: 0.4; pointer-events: none; }
+.pomo-settings label {
+  flex: 1; display: flex; flex-direction: column; gap: 6px;
+  font-size: 0.75rem; color: var(--muted); text-align: center; font-weight: 500;
+}
+.pomo-settings input {
+  width: 100%; padding: 10px; border: 1.5px solid var(--card-border); border-radius: 10px;
+  background: var(--item-bg); color: var(--text); font-family: inherit; font-size: 1rem; text-align: center; outline: none;
+  transition: border 0.2s;
+}
+.pomo-settings input:focus { border-color: var(--accent); }
+
+.pomo-controls { display: flex; gap: 10px; width: 100%; max-width: 200px; }
+.pomo-btn {
+  border: none; border-radius: 12px; font-family: inherit; font-weight: 600; cursor: pointer;
+  transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;
+}
+.pomo-btn.start {
+  flex: 1; padding: 14px; background: var(--text); color: var(--bg); font-size: 1rem;
+}
+.pomo-btn.start:hover { background: var(--accent); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px -4px var(--accent); }
+.pomo-btn.reset { width: 48px; background: var(--item-bg); color: var(--muted); }
+.pomo-btn.reset:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+/* Состояния */
+.pomodoro-card.running { border-color: var(--pomo-focus); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), var(--shadow); }
+.pomodoro-card.break { border-color: var(--pomo-break); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1), var(--shadow); }
+.pomodoro-card.break .pomo-time-display { color: var(--pomo-break); }
+.pomodoro-card.break .pomo-status { color: var(--pomo-break); background: rgba(16, 185, 129, 0.1); }
+
+.filters { display: flex; gap: 6px; padding: 4px; background: var(--item-bg); border-radius: 12px; margin-bottom: 18px; }
+.filter-btn {
+  flex: 1; padding: 8px 12px; border: none; background: transparent; color: var(--muted);
+  font-family: inherit; font-size: 0.85rem; font-weight: 500; border-radius: 9px; cursor: pointer; transition: all 0.2s ease;
+}
+.filter-btn:hover { color: var(--text); }
+.filter-btn.active { background: var(--card); color: var(--text); box-shadow: var(--shadow-sm); }
+
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+.task-item {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: var(--item-bg); border: 1px solid transparent; border-radius: 14px;
+  animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s; cursor: grab;
+  text-align: left; /* Возвращаем текст задач влево для читаемости */
+}
+.task-item:hover { background: var(--item-hover); border-color: var(--card-border); }
+.task-item.dragging { opacity: 0.4; cursor: grabbing; }
+.task-item.drag-over { border-color: var(--accent); border-style: dashed; }
+.task-item.removing { animation: slideOut 0.25s ease forwards; }
+
+.task-check { position: relative; width: 22px; height: 22px; flex-shrink: 0; cursor: pointer; }
+.task-check input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.checkmark {
+  position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--done);
+  display: grid; place-items: center; transition: all 0.2s ease; background: transparent;
+}
+.checkmark svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; opacity: 0; transform: scale(0.5); transition: all 0.2s ease; }
+.task-check input:checked ~ .checkmark { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; }
+.task-check input:checked ~ .checkmark svg { opacity: 1; transform: scale(1); }
+
+.task-text { flex: 1; font-size: 0.95rem; line-height: 1.4; word-break: break-word; transition: color 0.2s; cursor: pointer; user-select: none; }
+.task-item.done .task-text { color: var(--done); text-decoration: line-through; text-decoration-thickness: 2px; }
+
+.task-edit-input {
+  flex: 1; padding: 4px 8px; border: 1.5px solid var(--accent); border-radius: 8px;
+  background: var(--card); color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none;
+}
+
+.task-actions { display: flex; gap: 2px; flex-shrink: 0; }
+.action-btn { border: none; background: transparent; color: var(--muted); cursor: pointer; padding: 6px; border-radius: 8px; display: grid; place-items: center; transition: all 0.2s ease; opacity: 0; }
+.task-item:hover .action-btn { opacity: 1; }
+.action-btn.edit-btn:hover { color: var(--accent); background: rgba(99, 102, 241, 0.1); }
+.action-btn.delete-btn:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+.empty-state { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 20px; color: var(--muted); text-align: center; font-size: 0.9rem; }
+.empty-state svg { opacity: 0.4; }
+
+.app-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--card-border); font-size: 0.85rem; color: var(--muted); text-align: left; }
+.clear-btn { border: none; background: transparent; color: var(--danger); font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: background 0.2s; }
+.clear-btn:hover { background: rgba(239, 68, 68, 0.1); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { opacity: 0; transform: translateY(-8px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideOut { to { opacity: 0; transform: translateX(30px) scale(0.95); } }
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; gap: 16px; align-items: start; }
+  .app-header { flex-direction: row; justify-content: center; }
+  .icon-btn { position: static; }
+  .pomo-header { flex-direction: row; justify-content: center; gap: 12px; align-items: center; }
+  .pomo-title { font-size: 1.35rem; margin-bottom: 0; }
+  .pomo-time-display { font-size: 3rem; margin-bottom: 20px; }
+  .pomo-settings, .pomo-controls { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  body { padding: 20px 10px; }
+  .app { padding: 22px 18px; }
+  h1, .pomo-title { font-size: 1.35rem; }
+  .action-btn { opacity: 1; }
+  .bg-blob { filter: blur(60px); }
+  .app-header { flex-direction: column; gap: 8px; }
+}
