@@ -82,3 +82,13 @@
 ---
 
 ## Структура проекта
+
+```text
+todo-list_one/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # CI/CD: автоматический деплой на GitHub Pages
+├── index.html              # Главная страница: разметка (задачи + карточка таймера)
+├── style.css               # Стили: Grid/Flexbox-верстка, темная тема, анимации
+├── app.js                  # Логика: CRUD задач, localStorage, Drag & Drop, Помодоро
+└── README.md               # Описание проекта и техническая документация
